@@ -1,2 +1,2 @@
-# Interactivity: Sound_&_Skill
+# Interactivity: Sound & Skill
 Rep for module 1
