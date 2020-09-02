@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 # audio samples
 
@@ -12,3 +13,7 @@ Notes:
 
 * [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
 * [Filters](https://developer.mozilla.org/en-US/docs/Web/API/BiquadFilterNode)
+=======
+# Interactivity: Sound & Skill
+Rep for module 1
+>>>>>>> e521f669448e8c735268f2a5ea048968c906f53c
