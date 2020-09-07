@@ -1,5 +1,6 @@
 let audioCtx, analyser;
 let visualiser = null;
+let bpmArray = [];
 // Set up the interval meter.
 // 5: number of samples to measure over
 // 200: millisecond expected length of pulse (to avoid counting several times for same sound)
@@ -24,6 +25,7 @@ function onDocumentReady() {
     error => { console.error('Could not init microphone', error); });
 
   setInterval(updateDisplay, 300);
+  setInterval(arythmia, 300);
 }
 
 // Microphone successfully initalised, we now have access to audio data
@@ -78,7 +80,7 @@ function analyse() {
 
   // In testing, with FFT size of 32, bucket #19 correspnds with metronome
   // ...but probably not your sound.
-  const magicBucket = 18;
+  const magicBucket = 12;
 
   // Determine pulse if frequency threshold is exceeded.
   // -60 was determined empirically, you'll need to find your own threshold
@@ -116,28 +118,52 @@ function analyse() {
   window.requestAnimationFrame(analyse);
 }
 
+function arythmia(){
+  const currentIntervalMs = intervalMeter.calculate();
+  const currentBpm = currentIntervalMs ? parseInt(1.0 / (currentIntervalMs / 1000.0) * 60.0) : 0;
+  let i;
+  if(bpmArray.length < 10){
+    bpmArray.push(currentBpm);
+  } else {
+    bpmArray.shift();
+    bpmArray.push(currentBpm);
+  }
+  console.log(bpmArray);
+  if(bpmArray[0] != bpmArray[4] || bpmArray[9]){
+
+    // Use 300ms as an arbitrary limit (ie. fastest)
+    let relative = 300 / currentIntervalMs;
+
+    // Make some hue and lightness values from this percentage
+    const h = relative * 360;
+    const l = relative * 80;
+
+    // Set colour
+   document.body.style.backgroundColor = 'hsl(' + h + ', 100%, ' + l + '%)';
+  }
+}
+
 // Sets background colour and prints out interval info
 function updateDisplay() {
   // Calculate interval and derive BPM (if interval is above 0)
   const currentIntervalMs = intervalMeter.calculate();
   const currentBpm = currentIntervalMs ? parseInt(1.0 / (currentIntervalMs / 1000.0) * 60.0) : 0;
-
   // Use 300ms as an arbitrary limit (ie. fastest)
   let relative = 300 / currentIntervalMs;
 
   // Clamp value beteen 0.0->1.0
   if (relative > 1.0) relative = 1; if (relative < 0) relative = 0;
 
-  // Make some hue and lightness values from this percentage
+/*  // Make some hue and lightness values from this percentage
   const h = relative * 360;
   const l = relative * 80;
+
+  // Set colour
+  document.body.style.backgroundColor = 'hsl(' + h + ', 100%, ' + l + '%)';*/
 
   // Update text readout
   document.getElementById('intervalMs').innerText = parseInt(currentIntervalMs) + ' ms.';
   document.getElementById('intervalBpm').innerText = currentBpm + ' bpm.';
-
-  // Set colour
-  document.body.style.backgroundColor = 'hsl(' + h + ', 100%, ' + l + '%)';
 }
 
 // Returns TRUE if the threshold value is hit between the given frequency range
