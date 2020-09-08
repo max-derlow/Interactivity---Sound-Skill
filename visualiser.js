@@ -1,4 +1,3 @@
-
 /**
  * Visualiser component
  *
@@ -22,7 +21,7 @@ class Visualiser {
     // Add HTML
     parentElem.innerHTML = `
     <div style="border: 1px solid black; padding:0.5em; position:absolute">
-      <button id="rendererComponentToggle">🔼 Visualiser</button>
+      <button id="rendererComponentToggle">🔼</button>
       <div>
         <h1>Visualiser</h1>
         <h2>Frequency distribution</h2>
@@ -37,7 +36,7 @@ class Visualiser {
         <canvas id="rendererComponentWaveData" height="200" width="400"></canvas>
       </div>
     </section>
-    `;
+    `
     this.lastPointer = { x: 0, y: 0 };
     this.pointerDown = false;
     this.waveTracker = new Tracker();
@@ -56,7 +55,7 @@ class Visualiser {
         if (this.pointerDelaying) { this.pointerDelaying = false; this.pointerDown = true; }
       }, this.pointerClickDelayMs);
     });
-    this.element.addEventListener('pointerleave', (e) => { this.pointerDelaying = false; this.pointerDown = false; });
+    this.element.addEventListener('pointerleave', (e) => { this.pointerDelaying = false; this.pointerDown = false; })
 
     document.getElementById('rendererComponentWaveReset').addEventListener('click', () => {
       this.clear(document.getElementById('waveData'));
@@ -120,10 +119,10 @@ class Visualiser {
     const button = this.element.querySelector('button');
     if (value) {
       contentsElem.style.display = '';
-      button.innerText = '🔼 Visualiser';
+      button.innerText = '🔼'
     } else {
       contentsElem.style.display = 'none';
-      button.innerText = '🔽 Visualiser';
+      button.innerText = '🔽'
     }
   }
 
@@ -181,7 +180,7 @@ class Visualiser {
       var y = bipolar ? (canvasHeight / 2) - height : canvasHeight - height;
 
       if (i == 0) {
-        g.moveTo(x, y);
+        g.moveTo(x, y)
       } else {
         g.lineTo(x, y);
       }
