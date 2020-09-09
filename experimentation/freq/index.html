@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <!-- load styles -->
+</head>
+
+<body>
+<style>
+  body {
+    margin-top: 0px;
+    margin-left: 0px;
+    overflow: hidden;
+    cursor: none;
+    background-color: #d3d3d3;
+  }
+</style>
+<div class="target" id="hit">Peak threshold</div>
+<div id="intervalMs">
+
+</div>
+<div id="intervalBpm"></div>
+
+<!-- add canvas element -->
+<div style="position: relative;">
+  <canvas
+          id="graphics"
+          style="position: absolute; left: 0; top: 0; z-index: 0;
+		background-color:transparent; cursor:none;"
+  ></canvas>
+</div>
+
+<!-- load JavaScript -->
+<script src="../../util.js"></script>
+<script src="../../visualiser.js"></script>
+<script src="canvas.js"></script>
+<script src="micSetup.js"></script>
+
+</body>
+</html>

@@ -88,6 +88,7 @@ function analyse() {
 
   // Optional rendering of frequency data
   visualiser.renderFreq(freq);
+  visualiser.renderFreqI(freq);
 
   // Get snapshot of waveform
   const wave = new Float32Array(bins);
@@ -104,7 +105,6 @@ function analyse() {
 
   // Run again
   window.requestAnimationFrame(analyse);
-
 }
 
 

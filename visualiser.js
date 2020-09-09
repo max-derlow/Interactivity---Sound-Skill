@@ -10,6 +10,11 @@
  * 
  * Draws on https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Visualizations_with_Web_Audio_API
  */
+let globalMin;
+let globalAvg;
+let globalMax;
+let globalTest;
+
 class Visualiser {
 
   constructor(parentElem) {
@@ -41,6 +46,7 @@ class Visualiser {
     this.pointerDown = false;
     this.waveTracker = new Tracker();
     this.freqTracker = new Tracker(0);
+    this.freqTrackerI = new Tracker(1);
     this.element = parentElem.children[0];
 
     document.getElementById('rendererComponentToggle').addEventListener('click', (e) => {
@@ -60,6 +66,13 @@ class Visualiser {
     document.getElementById('rendererComponentWaveReset').addEventListener('click', () => {
       this.clear(document.getElementById('waveData'));
     });
+  }
+  //always rendering
+  renderFreqI(freq) {
+    this.freqTrackerI.add(freq[1]);
+    globalMin = this.freqTrackerI.min();
+    globalMax = this.freqTrackerI.max();
+    globalAvg = this.freqTrackerI.avg();
   }
 
   renderFreq(freq) {
@@ -95,7 +108,6 @@ class Visualiser {
           this.freqTracker.reset(i);
         }
         this.freqTracker.add(freq[i]);
-
         // Display
         g.fillStyle = 'black';
         g.fillText('Frequency (' + i + ') at pointer:  ' + getFrequencyAtIndex(i).toLocaleString('en') + '-' + getFrequencyAtIndex(i + 1).toLocaleString('en'), 2, 10);
@@ -109,6 +121,7 @@ class Visualiser {
     }
   }
 
+
   isExpanded() {
     const contentsElem = this.element.querySelector('div');
     return (contentsElem.style.display === '');
@@ -119,10 +132,10 @@ class Visualiser {
     const button = this.element.querySelector('button');
     if (value) {
       contentsElem.style.display = '';
-      button.innerText = '🔼'
+      button.innerText = '🔼';
     } else {
       contentsElem.style.display = 'none';
-      button.innerText = '🔽'
+      button.innerText = '🔽';
     }
   }
 
@@ -180,7 +193,7 @@ class Visualiser {
       var y = bipolar ? (canvasHeight / 2) - height : canvasHeight - height;
 
       if (i == 0) {
-        g.moveTo(x, y)
+        g.moveTo(x, y);
       } else {
         g.lineTo(x, y);
       }
