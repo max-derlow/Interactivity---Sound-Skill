@@ -1,5 +1,5 @@
 let audioCtx, analyser, visualiser = null;
-
+let globalFreq;
 if (document.readyState != 'loading') {
   onDocumentReady();
 } else {
@@ -9,12 +9,13 @@ if (document.readyState != 'loading') {
 // Main initialisation, called when document is loaded and ready.
 function onDocumentReady() {
   // 'Reset' button. Remove 'hit' class list on all elements.
+  /*
   document.getElementById('reset').addEventListener('click', () => {
     document.querySelectorAll('.hit').forEach(elem => elem.classList.remove('hit'));
   });
   visualiser = new Visualiser(document.getElementById('visualiser'));
   visualiser.setExpanded(false); // Collapse at startup
-
+*/
   // Initalise microphone
   navigator.getUserMedia(
     { audio: true },
@@ -57,28 +58,29 @@ function analyse() {
   analyser.getFloatFrequencyData(freq);
   analyser.getFloatTimeDomainData(wave);
 
+  globalFreq = freq; //hook for freq to be global
   // Test whether we hit a threshold between 0-80Hz (bass region)
   var hit = thresholdFrequency(0, 80, freq, -70);
   if (hit) {
-    document.getElementById('freqTarget').classList.add('hit');
+    //document.getElementById('freqTarget').classList.add('hit');
   }
 
   // Test whether we hit an peak threshold (this can be a short burst of sound)
   hit = thresholdPeak(wave, 0.9);
   if (hit) {
-    document.getElementById('peakTarget').classList.add('hit');
+    //document.getElementById('peakTarget').classList.add('hit');
   }
 
   // Test whether we hit a sustained (average) level
   // This must be a longer, sustained noise.
   hit = thresholdSustained(wave, 0.3);
   if (hit) {
-    document.getElementById('susTarget').classList.add('hit');
+    //document.getElementById('susTarget').classList.add('hit');
   }
 
   // Optional rendering of data
-  visualiser.renderWave(wave, true);
-  visualiser.renderFreq(freq);
+  //visualiser.renderWave(wave, true);
+  //visualiser.renderFreq(freq);
 
   // Run again
   window.requestAnimationFrame(analyse);
@@ -89,7 +91,6 @@ function analyse() {
 // Note that FFT size & smoothing has an averaging effect
 function thresholdFrequency(lowFreq, highFreq, freqData, threshold) {
   const samples = sampleData(lowFreq, highFreq, freqData);
-  console.log(freqData);
   let max = Number.MIN_SAFE_INTEGER;
   for (var i = 0; i < samples.length; i++) {
     if (samples[i] > threshold) return true;

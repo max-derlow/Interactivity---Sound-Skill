@@ -1,5 +1,5 @@
 let audioCtx, analyser, visualiser = null;
-
+let globalFreq;
 if (document.readyState != 'loading') {
   onDocumentReady();
 } else {
@@ -57,6 +57,7 @@ function analyse() {
   analyser.getFloatFrequencyData(freq);
   analyser.getFloatTimeDomainData(wave);
 
+  globalFreq = freq; //hook for freq to be global
   // Test whether we hit a threshold between 0-80Hz (bass region)
   var hit = thresholdFrequency(0, 80, freq, -70);
   if (hit) {
