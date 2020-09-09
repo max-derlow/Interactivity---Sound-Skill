@@ -18,7 +18,6 @@ The sketch demonstrates:
 # Things to try
 
 Tip: uncomment those console.log lines to see the computed data
-
 * Adjust the frequency threshold detection to a new range, eg for high-pitched whistling. Enable the visualiser or jump to the playground sketch to find the range
 * Play with different levels for peak/sustain. Can they be used to differentiate between your phone's notification beep, versus your phone ringing?
 * What about if these detection functions are combined? For example a mid-range sound which is also sustained?
