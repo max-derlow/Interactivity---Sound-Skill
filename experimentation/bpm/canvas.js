@@ -21,32 +21,6 @@ function drawMouse(x, y)//document.addEventListener("keypress", handleKeyPress, 
     ctx.stroke();
 }
 
-function animate() {
-    reqAnimFrame =  window.mozRequestAnimationFrame    || //get framerate
-        window.webkitRequestAnimationFrame ||
-        window.msRequestAnimationFrame     ||
-        window.oRequestAnimationFrame
-    ;
-    reqAnimFrame(animate);
-
-
-    if(radius <= 200) {
-        radius +=3;
-    } //increase size by 1 per frame
-
-    draw();
-}
-
-function draw() {
-    var canvas  = document.getElementById("ex1");
-    var context = canvas.getContext("2d");
-
-    context.beginPath();
-    context.arc(x, y, radius, 0, 2 * Math.PI, false);
-    context.fillStyle = 'green';
-    context.fill();
-}
-
 
 function handleMouseMove(event){
     mouseX = event.pageX;
