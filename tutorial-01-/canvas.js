@@ -3,6 +3,7 @@ canvas.width = document.documentElement.clientWidth;
 canvas.height = document.documentElement.clientHeight;
 let context = canvas.getContext("2d");
 let localFreq;
+let audioCtx, analyser, ampWindow, freqWindows;
 
 class Ball {
 	constructor() {
@@ -34,6 +35,26 @@ function animate() {
     draw();
 }
 */
+
+function behaviour() {
+	// ---- Process the data first
+	const bins = analyser.frequencyBinCount;
+	var freq = new Float32Array(bins);
+	var wave = new Float32Array(bins);
+	analyser.getFloatFrequencyData(freq);
+	analyser.getFloatTimeDomainData(wave);
+  
+	// Get the min, max & average of this slice of waveform data
+	// max: absolute max, min: absolute min, avg: average of absolute data
+	let waveD = getMinMaxAvg(wave);
+	ampWindow.add(waveD.avg); // Keep track of average readings over time
+  
+	// Track each frequency bin
+	for (var i = 0; i < analyser.fftSize / 2; i++) {
+	  freqWindows[i].add(freq[i]);
+	}
+}
+
 function draw() {
 	if (globalFreq != null){localFreq = globalFreq[0];}
 	//context.save();
