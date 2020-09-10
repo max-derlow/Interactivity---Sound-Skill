@@ -87,8 +87,8 @@ function analyse() {
     analyser.getFloatFrequencyData(freq);
 
     // Optional rendering of frequency data
-    visualiser.renderFreq(freq);
-    visualiser.renderFreqI(freq);
+    //visualiser.renderFreq(freq);
+    //visualiser.renderFreqI(freq);
 
     // Get snapshot of waveform
     const wave = new Float32Array(bins);
@@ -100,7 +100,7 @@ function analyse() {
     }
 
     // Optional rendering of waveform data
-    visualiser.renderWave(wave, false);
+    //visualiser.renderWave(wave, false);
 
 
     // Run again

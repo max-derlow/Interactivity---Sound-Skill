@@ -2,7 +2,7 @@ x=200;
 y=200;
 size=100;
 radius=30;
-
+/*
 function animate() {
     reqAnimFrame =  window.mozRequestAnimationFrame    || //get framerate
         window.webkitRequestAnimationFrame ||
@@ -18,7 +18,7 @@ function animate() {
 
     draw();
 }
-
+*/
 function draw() {
     let canvas  = document.getElementById("ex1");
     let context = canvas.getContext("2d");
@@ -29,4 +29,4 @@ function draw() {
     context.fill();
 }
 
-animate();
+draw();
