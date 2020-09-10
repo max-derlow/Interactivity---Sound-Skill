@@ -43,25 +43,6 @@ function animate() {
 }
 */
 
-function behaviour() {
-	// ---- Process the data first
-	const bins = analyser.frequencyBinCount;
-	var freq = new Float32Array(bins);
-	var wave = new Float32Array(bins);
-	analyser.getFloatFrequencyData(freq);
-	analyser.getFloatTimeDomainData(wave);
-  
-	// Get the min, max & average of this slice of waveform data
-	// max: absolute max, min: absolute min, avg: average of absolute data
-	let waveD = getMinMaxAvg(wave);
-	ampWindow.add(waveD.avg); // Keep track of average readings over time
-  
-	// Track each frequency bin
-	for (var i = 0; i < analyser.fftSize / 2; i++) {
-	  freqWindows[i].add(freq[i]);
-	}
-}
-
 function draw() {
 	//if (globalFreq !== null){localFreq = globalFreq[0];}
 	//context.save();
@@ -91,7 +72,7 @@ function draw() {
 	else if(ball.y + ball.radius >= canvas.height){
 		ball.y = canvas.height - ball.radius;
 		ball.i = 0;
-		ball.r += 0.001;
+		//ball.r += 0.001;
 		//ball.velocity = ball.velocity +- ball.r; doesn't work but fuck is that funny
 	}
 	// apply friction
@@ -100,8 +81,8 @@ function draw() {
 	}
 	// ensure we don't get negative velocity
 	else if(Math.abs(ball.velocity) <= 0.8){
-		ball.r = 0;
-		ball.velocity = 0;
+		ball.r = 0.5;
+		ball.velocity = 1;
 		console.log("killed dead");
 	}
 

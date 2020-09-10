@@ -59,23 +59,26 @@ function analyse() {
   analyser.getFloatTimeDomainData(wave);
 
   globalFreq = freq; //hook for freq to be global
+
   // Test whether we hit a threshold between 0-80Hz (bass region)
   var hit = thresholdFrequency(0, 80, freq, -70);
   if (hit) {
-    //document.getElementById('freqTarget').classList.add('hit');
+    ball.r = 0.02//document.getElementById('freqTarget').classList.add('hit');
   }
 
   // Test whether we hit an peak threshold (this can be a short burst of sound)
-  hit = thresholdPeak(wave, 0.9);
+  hit = thresholdPeak(wave, 0.5);
   if (hit) {
-    //document.getElementById('peakTarget').classList.add('hit');
+    ball.velocity++;//document.getElementById('peakTarget').classList.add('hit');
   }
 
   // Test whether we hit a sustained (average) level
   // This must be a longer, sustained noise.
   hit = thresholdSustained(wave, 0.3);
   if (hit) {
-    //document.getElementById('susTarget').classList.add('hit');
+    ball.radius++//document.getElementById('susTarget').classList.add('hit');
+  } else if (ball.radius>50) {
+    ball.radius--
   }
 
   // Optional rendering of data
