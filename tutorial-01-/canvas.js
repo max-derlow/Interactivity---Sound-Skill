@@ -41,6 +41,10 @@ function draw() {
 	if(ball.x + ball.velocity != canvas.width){
 		ball.x += ball.velocity;
 	}
+
+	if(ball.x + ball.radius > canvas.width){
+		ball.x = 0;
+	}
 	context.beginPath();
 	context.arc(ball.x, ball.y, ball.radius, 0, 2 * Math.PI, false);
 	context.fillStyle = ball.colour;
