@@ -5,9 +5,10 @@ canvas.height = document.documentElement.clientHeight;
 const context = canvas.getContext("2d");
 
 //Set styles
-context.fillStyle = 'rgba(255, 255, 255, 0.3)';
+context.fillStyle = 'green';
 context.strokeStyle = 'rgb(0, 0, 0)';
 
+//
 //Variable for tree
 let treeSize = 50;
 
@@ -44,8 +45,7 @@ function drawBranch (height){
 
 	//Draw branch
 	context.beginPath();
-	context.moveTo(0,0);
-	context.lineTo(0, - height);
+	context.arc(x, y, radius, 0, 2 * Math.PI, false);
 	context.stroke();
 
 	//If branch is not "too small" draw two more
