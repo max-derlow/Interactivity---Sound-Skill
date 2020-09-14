@@ -15,7 +15,6 @@ class Ball {
 		this.r = 0; //friction;
 		this.x = 40;
 		this.y = 0;
-		//this.size = 0; -
 		this.radius = 30;
 		this.colour = 'blue';
 		this.velocity = 10;
@@ -25,41 +24,22 @@ class Ball {
 
 let ball = new Ball();
 
-/*
-function animate() {
-    reqAnimFrame =  window.mozRequestAnimationFrame    || //get framerate
-        window.webkitRequestAnimationFrame ||
-        window.msRequestAnimationFrame     ||
-        window.oRequestAnimationFrame
-    ;
-    reqAnimFrame(animate);
-
-
-    if(radius <= 300) {
-        radius +=3;
-    } //increase size by 1 per frame
-
-    draw();
-}
-*/
-
 function draw() {
-	//if (globalFreq !== null){localFreq = globalFreq[0];}
-	//context.save();
+	//Clear the canvsa
 	context.clearRect(0,0,canvas.width, canvas.height);
-	if(ball.x + ball.radius !== canvas.width){
+
+	//Move the ball
+	if(ball.x + (ball.radius/2) < canvas.width && ball.x - (ball.radius/2) > 0){
+		ball.x += ball.velocity;
+	} else { //change direction if out of bounds
+		ball.velocity = ball.velocity * -1;
 		ball.x += ball.velocity;
 	}
-/*
-	if(ball.x + ball.radius > (canvas.width + 60)){
-		ball.x = 0;
-	}
 
- */
 // the ball is bouncing left and right
 	if(ball.x + ball.radius >= canvas.width || ball.x <= 0) {
-		ball.velocity = (ball.velocity * -1);
-		ball.r = (ball.r * -1);
+
+		//ball.r = (ball.r * -1);
 	}
 
 	// the ball is falling
@@ -100,4 +80,5 @@ function onResize() {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
 }
+
 requestAnimationFrame(draw);
