@@ -62,7 +62,7 @@ function draw() {
 	// ensure we don't get negative velocity
 	else if(Math.abs(ball.velocity) <= 0.8){
 		ball.r = 0.5;
-		ball.velocity = 1;
+		ball.velocity = 0.5;
 		console.log("killed dead");
 	}
 
@@ -80,5 +80,45 @@ function onResize() {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
 }
+
+function analyse() {
+	const bins = analyser.frequencyBinCount;
+  
+	// Get frequency and amplitude data
+	const freq = new Float32Array(bins);
+	const wave = new Float32Array(bins);
+	analyser.getFloatFrequencyData(freq);
+	analyser.getFloatTimeDomainData(wave);
+  
+	globalFreq = freq; //hook for freq to be global
+  
+	// Test whether we hit a threshold between 0-80Hz (bass region)
+	var hit = thresholdFrequency(0, 80, freq, -70);
+	if (hit) {
+	  ball.r = 0.02//document.getElementById('freqTarget').classList.add('hit');
+	}
+  
+	// Test whether we hit an peak threshold (this can be a short burst of sound)
+	hit = thresholdPeak(wave, 0.5);
+	if (hit) {
+	  ball.velocity++;//document.getElementById('peakTarget').classList.add('hit');
+	}
+  
+	// Test whether we hit a sustained (average) level
+	// This must be a longer, sustained noise.
+	hit = thresholdSustained(wave, 0.3);
+	if (hit) {
+	  ball.radius++//document.getElementById('susTarget').classList.add('hit');
+	} else if (ball.radius>50) {
+	  ball.radius--
+	}
+  
+	// Optional rendering of data
+	//visualiser.renderWave(wave, true);
+	//visualiser.renderFreq(freq);
+  
+	// Run again
+	window.requestAnimationFrame(analyse);
+  }
 
 requestAnimationFrame(draw);

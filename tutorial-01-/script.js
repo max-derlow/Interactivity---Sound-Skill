@@ -51,7 +51,7 @@ function onMicSuccess(stream) {
   window.requestAnimationFrame(analyse);
 }
 
-function analyse() {
+/*function analyse() {
   const bins = analyser.frequencyBinCount;
 
   // Get frequency and amplitude data
@@ -89,8 +89,7 @@ function analyse() {
 
   // Run again
   window.requestAnimationFrame(analyse);
-
-}
+}*/
 
 // Returns TRUE if the threshold value is hit between the given frequency range
 // Note that FFT size & smoothing has an averaging effect
