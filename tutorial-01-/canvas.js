@@ -36,6 +36,13 @@ function draw() {
 		ball.x += ball.velocity;
 	}
 
+	if(ball.velocity >= 40){
+		ball.velocity = 40;
+		console.log(ball.velocity);
+	} else if(ball.velocity <= -40){
+		ball.velocity = -40;
+	}
+
 // the ball is bouncing left and right
 	if(ball.x + ball.radius >= canvas.width || ball.x <= 0) {
 
@@ -60,7 +67,7 @@ function draw() {
 		ball.velocity -= ball.r;
 	}
 	// ensure we don't get negative velocity
-	else if(Math.abs(ball.velocity) <= 0.8){
+	else if(Math.abs(ball.velocity) <= 0.05){
 		ball.r = 0.5;
 		ball.velocity = 0.5;
 		console.log("killed dead");
@@ -95,13 +102,27 @@ function analyse() {
 	// Test whether we hit a threshold between 0-80Hz (bass region)
 	var hit = thresholdFrequency(0, 95, freq, -70);
 	if (hit) {
-		ball.velocity -=1;//document.getElementById('freqTarget').classList.add('hit');
+		//ball.velocity -=1;//document.getElementById('freqTarget').classList.add('hit');
+		if(ball.velocity > 0){
+			ball.velocity += 0.1;
+		} else {
+			ball.velocity-=0.2;
+			//console.log(ball.velocity);
+		}
+	} else {
+		if(ball.velocity > 0){
+			//ball.velocity -= 0.1;
+		} else {
+			ball.velocity+=0.2;
+			//console.log(ball.velocity);
+		}
+
 	}
   
 	// Test whether we hit an peak threshold (this can be a short burst of sound)
-	hit = thresholdPeak(wave, 0.5);
+	hit = thresholdPeak(wave, 0.3);
 	if (hit) {
-	  ball.colour = 'red';//document.getElementById('peakTarget').classList.add('hit');
+	  ball.y -=40;//document.getElementById('peakTarget').classList.add('hit');
 	} else {
 		ball.colour = 'blue';
 	}
