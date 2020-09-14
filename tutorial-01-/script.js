@@ -8,6 +8,8 @@ if (document.readyState != 'loading') {
 
 // Main initialisation, called when document is loaded and ready.
 function onDocumentReady() {
+  window.addEventListener('resize', onResize);
+
   // 'Reset' button. Remove 'hit' class list on all elements.
   /*
   document.getElementById('reset').addEventListener('click', () => {

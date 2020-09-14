@@ -96,4 +96,8 @@ function draw() {
 	requestAnimationFrame(draw);
 }
 
+function onResize() {
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+}
 requestAnimationFrame(draw);
