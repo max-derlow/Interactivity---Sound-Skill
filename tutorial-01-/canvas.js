@@ -93,15 +93,17 @@ function analyse() {
 	globalFreq = freq; //hook for freq to be global
   
 	// Test whether we hit a threshold between 0-80Hz (bass region)
-	var hit = thresholdFrequency(0, 80, freq, -70);
+	var hit = thresholdFrequency(0, 95, freq, -70);
 	if (hit) {
-	  ball.r = 0.02//document.getElementById('freqTarget').classList.add('hit');
+		ball.velocity -=1;//document.getElementById('freqTarget').classList.add('hit');
 	}
   
 	// Test whether we hit an peak threshold (this can be a short burst of sound)
 	hit = thresholdPeak(wave, 0.5);
 	if (hit) {
-	  ball.velocity++;//document.getElementById('peakTarget').classList.add('hit');
+	  ball.colour = 'red';//document.getElementById('peakTarget').classList.add('hit');
+	} else {
+		ball.colour = 'blue';
 	}
   
 	// Test whether we hit a sustained (average) level
