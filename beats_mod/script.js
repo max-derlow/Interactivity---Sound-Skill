@@ -1,11 +1,12 @@
 let audioCtx, analyser;
 let visualiser = null;
 let bpmArray = [];
+let pulsed;
 // Set up the interval meter.
 // 5: number of samples to measure over
 // 200: millisecond expected length of pulse (to avoid counting several times for same sound)
 //      setting this too high will mean that legit pulses will be ignored
-let intervalMeter = new IntervalMeter(5, 200);
+let intervalMeter = new IntervalMeter(3, 200);
 
 if (document.readyState != 'loading') {
   onDocumentReady();
@@ -15,17 +16,14 @@ if (document.readyState != 'loading') {
 
 // Main initialisation, called when document is loaded and ready.
 function onDocumentReady() {
-  visualiser = new Visualiser(document.getElementById('visualiser'));
-  visualiser.setExpanded(false); // Collapse at startup
+  //visualiser = new Visualiser(document.getElementById('visualiser'));
+  //visualiser.setExpanded(false); // Collapse at startup
 
   // Initalise microphone
   navigator.getUserMedia(
     { audio: true },
     onMicSuccess, // call this when ready
     error => { console.error('Could not init microphone', error); });
-
-  setInterval(updateDisplay, 300);
-  setInterval(arythmia, 300);
 }
 
 // Microphone successfully initalised, we now have access to audio data
@@ -45,7 +43,7 @@ function onMicSuccess(stream) {
   // smoothingTimeConstant ranges from 0.0 to 1.0
   // 0 = no averaging. Fast response, jittery
   // 1 = maximum averaging. Slow response, smooth
-  analyser.smoothingTimeConstant = 0.5;
+  analyser.smoothingTimeConstant = 0.8;
 
   // Low and high shelf filters. Gain is set to 0 so they have no effect
   // could be useful for excluding background noise.
@@ -87,83 +85,21 @@ function analyse() {
   let hit = (freq[magicBucket] > -60);
 
   // An alternative approach is to check for a peak, regardless of freq
-  // let hit = thresholdPeak(wave, 0.004);
+  //let hit = thresholdPeak(wave, 0.004);
 
 
   if (hit) {
     // Use the IntevalMeter (provided by util.js)
     // to track the time between pulses.
-
-    // Returns TRUE if pulse was recorded, or FALSE if seems to be part of an already noted pulse
-    let pulsed = intervalMeter.pulse();
-
-    if (pulsed) {
-      // Debug
-      // let avgMs = intervalMeter.calculate();
-      // let avgBpm = 1.0 / (avgMs / 1000.0) * 60.0;
-      // console.log('level: ' + freq[magicBucket] +
-      //   '\tms: ' + avgMs +
-      //   '\tbpm: ' + avgBpm);
-      document.getElementById('hit').classList.add('hit');
-    }
-  } else {
-    document.getElementById('hit').classList.remove('hit');
+    pulsed = intervalMeter.pulse();
   }
 
   // Optional rendering of data
-  visualiser.renderWave(wave, true);
-  visualiser.renderFreq(freq);
+  //visualiser.renderWave(wave, true);
+  //visualiser.renderFreq(freq);
 
   // Run again
   window.requestAnimationFrame(analyse);
-}
-
-function arythmia(){
-  const currentIntervalMs = intervalMeter.calculate();
-  const currentBpm = currentIntervalMs ? parseInt(1.0 / (currentIntervalMs / 1000.0) * 60.0) : 0;
-  let i;
-  if(bpmArray.length < 10){
-    bpmArray.push(currentBpm);
-  } else {
-    bpmArray.shift();
-    bpmArray.push(currentBpm);
-  }
-  console.log(bpmArray);
-  if(bpmArray[0] != bpmArray[4] || bpmArray[9]){
-
-    // Use 300ms as an arbitrary limit (ie. fastest)
-    let relative = 300 / currentIntervalMs;
-
-    // Make some hue and lightness values from this percentage
-    const h = relative * 360;
-    const l = relative * 80;
-
-    // Set colour
-   document.body.style.backgroundColor = 'hsl(' + h + ', 100%, ' + l + '%)';
-  }
-}
-
-// Sets background colour and prints out interval info
-function updateDisplay() {
-  // Calculate interval and derive BPM (if interval is above 0)
-  const currentIntervalMs = intervalMeter.calculate();
-  const currentBpm = currentIntervalMs ? parseInt(1.0 / (currentIntervalMs / 1000.0) * 60.0) : 0;
-  // Use 300ms as an arbitrary limit (ie. fastest)
-  let relative = 300 / currentIntervalMs;
-
-  // Clamp value beteen 0.0->1.0
-  if (relative > 1.0) relative = 1; if (relative < 0) relative = 0;
-
-/*  // Make some hue and lightness values from this percentage
-  const h = relative * 360;
-  const l = relative * 80;
-
-  // Set colour
-  document.body.style.backgroundColor = 'hsl(' + h + ', 100%, ' + l + '%)';*/
-
-  // Update text readout
-  document.getElementById('intervalMs').innerText = parseInt(currentIntervalMs) + ' ms.';
-  document.getElementById('intervalBpm').innerText = currentBpm + ' bpm.';
 }
 
 // Returns TRUE if the threshold value is hit between the given frequency range
