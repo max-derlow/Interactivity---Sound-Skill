@@ -5,7 +5,7 @@ let context = canvas.getContext("2d");
 
 let ballArray = {
 	"ball0": {'radius': 30, 'colour': 'red', 'velocity': 10, 'mass': 10},
-	"ball1": {'radius': 60, 'colour': 'green', 'velocity': 5, 'mass': 10},
+	"ball1": {'radius': 60, 'colour': 'green', 'velocity': 6, 'mass': 10},
 	"ball2": {'radius': 90, 'colour': 'cyan', 'velocity': 2, 'mass': 10},
 };
 
