@@ -9,6 +9,38 @@ let ballArray = {
 	"ball2": {'radius': 90, 'colour': 'cyan', 'velocity': 10, 'mass': 10},
 };
 
+//Fix so these are generated programatically instead.
+let ghostBallArray = {
+	"ghostBall0":  {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall1":  {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall2":  {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall3":  {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall4":  {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall5":  {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall6":  {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall7":  {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall8":  {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall9":  {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall10": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall11": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall12": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall13": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall14": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall15": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall16": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall17": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall18": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall19": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall20": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall21": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall22": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall23": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall24": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall25": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+	"ghostBall26": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
+};
+
+
 class Ball {
 	constructor(radius, colour, velocity, mass) {
 		this.i = 0; //amount of times the ball has refreshed while in the air
@@ -18,8 +50,9 @@ class Ball {
 		this.y = 0;
 		this.radius = radius;
 		this.colour = colour;
+		this.opacity = 1;
 		this.velocity = velocity;
-		this.mass = mass; //kg, let's say.
+		this.mass = mass; // kg
 	}
 
 	exampleMethod(){} // Because I'm * and will forget if I don't write it here.
@@ -28,13 +61,23 @@ class Ball {
 //let ball = new Ball();
 
 // create all ball objects
-
 function createBalls() {
 	console.log(Object.keys(ballArray));
 	for(let i = 0; i <= Object.keys(ballArray).length -1; i++){
 		console.log(String(i));
 		let ball = "ball" + String(i);
 		let ballProp = ballArray["ball" + String(i)];
+		window[ball] = new Ball(ballProp.radius, ballProp.colour, ballProp.velocity, ballProp.mass);
+	}
+}
+
+//create all ghost ball objects
+function createGhostBalls(){
+	console.log(Object.keys(ghostBallArray));
+	for(let i = 0; i <= Object.keys(ghostBallArray).length -1; i++){
+		console.log(String(i));
+		let ball = "ghostBall" + String(i);
+		let ballProp = ghostBallArray["ghostBall" + String(i)];
 		window[ball] = new Ball(ballProp.radius, ballProp.colour, ballProp.velocity, ballProp.mass);
 	}
 }
@@ -46,15 +89,25 @@ function draw() {
 	for(let i = 0; i <= Object.keys(ballArray).length -1; i++){
 		let ball = window["ball" + String(i)];
 
-		if(ball.x)
-		//Move the ball - the ball gets fucky sometimes so still needs tweaking
-		if(ball.x + (ball.radius/2) < canvas.width && ball.x - (ball.radius/2) > 0){
+		if(ball.x <= 0){
+			ball.x = 0 + ball.radius;
+			ball.velocity = ball.velocity * -1;
+			console.log("changing direction");
+		} else if (ball.x >= canvas.width){
+			ball.x = canvas.width - ball.radius;
+			ball.velocity = ball.velocity * -1;
+		} else {
+			ball.x += ball.velocity;
+		}
+		/*
+		//Move the ball - the ball gets funky sometimes so still needs tweaking
+		if(ball.x + (ball.radius) < canvas.width && ball.x - (ball.radius) > 0){
 			ball.x += ball.velocity;
 		} else { //change direction if out of bounds
 			ball.velocity = ball.velocity * -1;
 			ball.x += ball.velocity;
 		}
-
+*/
 		if(ball.velocity >= 40){
 			ball.velocity = 40;
 			console.log(ball.velocity);
@@ -97,13 +150,90 @@ function draw() {
 		context.fillStyle = ball.colour;
 		context.fill();
 	}
-
 	requestAnimationFrame(draw);
+	requestAnimationFrame(drawGhostBalls);
 }
+
+//Handles the 'runCounter' which affects the opacity of ghost balls. Real fokkin' spaghetti code but w/e.
+let runCounter = 0;
+let runDirection = '+';
+function handleRunCounter(){
+	if(runDirection === '+' && runCounter < 100){
+		runCounter += 1;
+	} else if(runDirection === '+'&& runCounter >= 100){
+		runCounter -= 1;
+		runDirection = '-';
+	}
+
+	if(runDirection === '-' && runCounter > 0){
+		runCounter -= 1;
+	} else if(runDirection === '-'&& runCounter <= 0){
+		runCounter += 1;
+		runDirection = '+';
+	}
+}
+
+//handle velocity - maybe or maybe not. doesn't seem optimal.
+function handleVelocity(ball, velocityDelta){
+	if(ball.velocity > 0) {
+		ball.velocity += velocityDelta;
+		ball.x += ball.velocity;
+	} else if (ball.velocity < 0) {
+		ball.velocity -= velocityDelta;
+		ball.x -= ball.velocity;
+	}
+}
+
+function drawGhostBalls(){
+	handleRunCounter();
+	let opacity = runCounter/100;
+
+	for(let i = 0; i <= Object.keys(ghostBallArray).length -1; i++) {
+		let ball = window["ghostBall" + String(i)];
+		if(runCounter/100 === 0.01){
+			ball.x = Math.floor(Math.random() * canvas.width);
+			ball.y = Math.floor(Math.random() * canvas.height);
+		}
+		context.beginPath();
+		context.arc(ball.x, ball.y, ball.radius, 0, 2 * Math.PI, false);
+		context.fillStyle = ball.colour + opacity + ")";
+		context.fill();
+	}
+}
+
 
 function onResize() {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
+}
+
+function handleBehaviour(ball, behaviour, intensity){
+	switch (behaviour){
+		case "jumping": //BPM is j
+			behaviour = "jumping";
+			ball.i += intensity;
+			break;
+		case "velocity": //Amplitude threshhold - velocity
+			behaviour = "velocity";
+			ball.velocity += intensity;
+			break;
+		case "radius": // Amplitude sustained - size
+			behaviour = "radius";
+			ball.radius += intensity;
+			break;
+		case "opacity": //BPM is opacity - when looking at ghost balls
+			behaviour = "opacity";
+			ball.opacity += intensity;
+			break;
+		case "colour": //Somewhere
+			behaviour = "colour";
+			ball.colour += intensity;
+			break;
+		case "position": //Somewhere
+			behaviour = "position";
+			ball.colour += intensity;
+			break;
+	}
 }
 
 function analyse() {
@@ -127,13 +257,13 @@ function analyse() {
 			if (ball.velocity > 0) {
 				ball.velocity += 0.1;
 			} else {
-				ball.velocity -= 0.2;
+				ball.velocity -= 0.1;
 			}
 		} else {
 			if (ball.velocity > 0) {
-				//ball.velocity -= 0.1;
+				ball.velocity -= 0.1;
 			} else {
-				ball.velocity += 0.2;
+				ball.velocity += 0.1;
 				//console.log(ball.velocity);
 			}
 		}
@@ -141,6 +271,7 @@ function analyse() {
 		// Test whether we hit an peak threshold (this can be a short burst of sound)
 		hit = thresholdPeak(wave, 0.3);
 		if (hit) {
+			// Behaviour(ball.behaviour, ball.intensity)
 			ball.y -=40;//document.getElementById('peakTarget').classList.add('hit');
 		} else {
 			//ball.colour = 'blue';
@@ -157,4 +288,5 @@ function analyse() {
   }
 
 createBalls();
+createGhostBalls();
 requestAnimationFrame(draw);
