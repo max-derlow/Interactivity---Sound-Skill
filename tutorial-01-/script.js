@@ -1,4 +1,6 @@
-let audioCtx, analyser, visualiser = null;
+// let audioCtx;
+// let analyser;
+// let visualiser = null;
 let globalFreq;
 if (document.readyState != 'loading') {
   onDocumentReady();

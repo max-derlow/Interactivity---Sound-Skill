@@ -1,5 +1,5 @@
 let audioCtx, analyser;
-let visualiser = null;
+//let visualiser = null;
 let bpmArray = [];
 // Set up the interval meter.
 // 5: number of samples to measure over
@@ -15,8 +15,8 @@ if (document.readyState != 'loading') {
 
 // Main initialisation, called when document is loaded and ready.
 function onDocumentReady() {
-  visualiser = new Visualiser(document.getElementById('visualiser'));
-  visualiser.setExpanded(false); // Collapse at startup
+  //visualiser = new Visualiser(document.getElementById('visualiser'));
+  //visualiser.setExpanded(false); // Collapse at startup
 
   // Initalise microphone
   navigator.getUserMedia(
@@ -111,8 +111,8 @@ function analyse() {
   }
 
   // Optional rendering of data
-  visualiser.renderWave(wave, true);
-  visualiser.renderFreq(freq);
+  //visualiser.renderWave(wave, true);
+  //visualiser.renderFreq(freq);
 
   // Run again
   window.requestAnimationFrame(analyse);

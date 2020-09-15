@@ -3,6 +3,8 @@ canvas.width = document.documentElement.clientWidth;
 canvas.height = document.documentElement.clientHeight;
 let context = canvas.getContext("2d");
 
+
+
 let ballArray = {
 	"ball0": {'radius': 30, 'colour': 'red', 'velocity': 10, 'mass': 10},
 	"ball1": {'radius': 60, 'colour': 'green', 'velocity': 10, 'mass': 10},
@@ -151,6 +153,7 @@ function draw() {
 		context.fill();
 	}
 	requestAnimationFrame(draw);
+	requestAnimationFrame(drawBigBall);
 	requestAnimationFrame(drawGhostBalls);
 }
 
@@ -201,6 +204,12 @@ function drawGhostBalls(){
 	}
 }
 
+function drawBigBall(){
+	context.beginPath();
+	context.arc(canvas.width + (runCounter * 4), canvas.height, (canvas.height/2), 0, 2 * Math.PI, false);
+	context.fillStyle = "rgba(255,153,51,0.75)";
+	context.fill();
+}
 
 function onResize() {
 	canvas.width = window.innerWidth;
