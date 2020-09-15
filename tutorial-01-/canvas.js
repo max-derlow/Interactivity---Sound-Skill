@@ -2,83 +2,101 @@ let canvas  = document.getElementById("graphics");
 canvas.width = document.documentElement.clientWidth;
 canvas.height = document.documentElement.clientHeight;
 let context = canvas.getContext("2d");
-let localFreq;
-//let audioCtx;
-//let analyser;
-let ampWindow;
-let freqWindows;
+
+let ballArray = {
+	"ball0": {'radius': 30, 'colour': 'red', 'velocity': 10, 'mass': 10},
+	"ball1": {'radius': 60, 'colour': 'green', 'velocity': 10, 'mass': 10},
+	"ball2": {'radius': 90, 'colour': 'cyan', 'velocity': 10, 'mass': 10},
+};
 
 class Ball {
-	constructor() {
+	constructor(radius, colour, velocity, mass) {
 		this.i = 0; //amount of times the ball has refreshed while in the air
 		this.i2 = 0;
 		this.r = 0; //friction;
 		this.x = 40;
 		this.y = 0;
-		this.radius = 30;
-		this.colour = 'blue';
-		this.velocity = 10;
-		this.mass = 10; //kg, let's say.
+		this.radius = radius;
+		this.colour = colour;
+		this.velocity = velocity;
+		this.mass = mass; //kg, let's say.
+	}
+
+	exampleMethod(){} // Because I'm * and will forget if I don't write it here.
+}
+
+//let ball = new Ball();
+
+// create all ball objects
+
+function createBalls() {
+	console.log(Object.keys(ballArray));
+	for(let i = 0; i <= Object.keys(ballArray).length -1; i++){
+		console.log(String(i));
+		let ball = "ball" + String(i);
+		let ballProp = ballArray["ball" + String(i)];
+		window[ball] = new Ball(ballProp.radius, ballProp.colour, ballProp.velocity, ballProp.mass);
 	}
 }
 
-let ball = new Ball();
-
 function draw() {
-	//Clear the canvsa
+	//Clear the canvas
 	context.clearRect(0,0,canvas.width, canvas.height);
 
-	//Move the ball
-	if(ball.x + (ball.radius/2) < canvas.width && ball.x - (ball.radius/2) > 0){
-		ball.x += ball.velocity;
-	} else { //change direction if out of bounds
-		ball.velocity = ball.velocity * -1;
-		ball.x += ball.velocity;
-	}
+	for(let i = 0; i <= Object.keys(ballArray).length -1; i++){
+		let ball = window["ball" + String(i)];
 
-	if(ball.velocity >= 40){
-		ball.velocity = 40;
-		console.log(ball.velocity);
-	} else if(ball.velocity <= -40){
-		ball.velocity = -40;
-	}
+		if(ball.x)
+		//Move the ball - the ball gets fucky sometimes so still needs tweaking
+		if(ball.x + (ball.radius/2) < canvas.width && ball.x - (ball.radius/2) > 0){
+			ball.x += ball.velocity;
+		} else { //change direction if out of bounds
+			ball.velocity = ball.velocity * -1;
+			ball.x += ball.velocity;
+		}
 
-// the ball is bouncing left and right
-	if(ball.x + ball.radius >= canvas.width || ball.x <= 0) {
+		if(ball.velocity >= 40){
+			ball.velocity = 40;
+			console.log(ball.velocity);
+		} else if(ball.velocity <= -40){
+			ball.velocity = -40;
+		}
 
-		//ball.r = (ball.r * -1);
-	}
+	// the ball is bouncing left and right
+		if(ball.x + ball.radius >= canvas.width || ball.x <= 0) {
 
-	// the ball is falling
-	if(ball.y + ball.radius <= canvas.height) {
-		ball.i -= 1;
-		ball.y = ball.y - ball.i;
-	}
+			//ball.r = (ball.r * -1);
+		}
 
-	// if it hits the floor, stop falling
-	else if(ball.y + ball.radius >= canvas.height){
-		ball.y = canvas.height - ball.radius;
-		ball.i = 0;
-		//ball.r += 0.001;
-		//ball.velocity = ball.velocity +- ball.r; doesn't work but fuck is that funny
-	}
-	// apply friction
-	if(ball.velocity >= 0){
-		ball.velocity -= ball.r;
-	}
-	// ensure we don't get negative velocity
-	else if(Math.abs(ball.velocity) <= 0.05){
-		ball.r = 0.5;
-		ball.velocity = 0.5;
-		console.log("killed dead");
-	}
+		// the ball is falling
+		if(ball.y + ball.radius <= canvas.height) {
+			ball.i -= 1;
+			ball.y = ball.y - ball.i;
+		}
 
-	context.beginPath();
-	context.arc(ball.x, ball.y, ball.radius, 0, 2 * Math.PI, false);
-	context.fillStyle = ball.colour;
-	context.fill();
+		// if it hits the floor, stop falling
+		else if(ball.y + ball.radius >= canvas.height){
+			ball.y = canvas.height - ball.radius;
+			ball.i = 0;
+			//ball.r += 0.001;
+			//ball.velocity = ball.velocity +- ball.r; doesn't work but fuck is that funny
+		}
+		// apply friction
+		if(ball.velocity >= 0){
+			ball.velocity -= ball.r;
+		}
+		// ensure we don't get negative velocity
+		else if(Math.abs(ball.velocity) <= 0.05){
+			ball.r = 0.5;
+			ball.velocity = 0.5;
+			console.log("killed dead");
+		}
 
-	//context.restore();
+		context.beginPath();
+		context.arc(ball.x, ball.y, ball.radius, 0, 2 * Math.PI, false);
+		context.fillStyle = ball.colour;
+		context.fill();
+	}
 
 	requestAnimationFrame(draw);
 }
@@ -97,51 +115,46 @@ function analyse() {
 	analyser.getFloatFrequencyData(freq);
 	analyser.getFloatTimeDomainData(wave);
   
-	globalFreq = freq; //hook for freq to be global
+	globalFreq = freq; //hook for freq to be global DOESN'T WORK. WHY????
   
 	// Test whether we hit a threshold between 0-80Hz (bass region)
-	var hit = thresholdFrequency(0, 95, freq, -70);
-	if (hit) {
-		//ball.velocity -=1;//document.getElementById('freqTarget').classList.add('hit');
-		if(ball.velocity > 0){
-			ball.velocity += 0.1;
+	for(let i = 0; i <= Object.keys(ballArray).length -1; i++) {
+		let ball = window["ball" + String(i)];
+		let hit = thresholdFrequency(0, 95, freq, -70);
+
+		if (hit) {
+			//ball.velocity -=1;//document.getElementById('freqTarget').classList.add('hit');
+			if (ball.velocity > 0) {
+				ball.velocity += 0.1;
+			} else {
+				ball.velocity -= 0.2;
+			}
 		} else {
-			ball.velocity-=0.2;
-			//console.log(ball.velocity);
-		}
-	} else {
-		if(ball.velocity > 0){
-			//ball.velocity -= 0.1;
-		} else {
-			ball.velocity+=0.2;
-			//console.log(ball.velocity);
+			if (ball.velocity > 0) {
+				//ball.velocity -= 0.1;
+			} else {
+				ball.velocity += 0.2;
+				//console.log(ball.velocity);
+			}
 		}
 
+		// Test whether we hit an peak threshold (this can be a short burst of sound)
+		hit = thresholdPeak(wave, 0.3);
+		if (hit) {
+			ball.y -=40;//document.getElementById('peakTarget').classList.add('hit');
+		} else {
+			//ball.colour = 'blue';
+		}
+
+		hit = thresholdSustained(wave, 0.3);
+		if (hit) {
+			ball.radius++;//document.getElementById('susTarget').classList.add('hit');
+		} else if (ball.radius>50) {
+			ball.radius--;
+		}
 	}
-  
-	// Test whether we hit an peak threshold (this can be a short burst of sound)
-	hit = thresholdPeak(wave, 0.3);
-	if (hit) {
-	  ball.y -=40;//document.getElementById('peakTarget').classList.add('hit');
-	} else {
-		ball.colour = 'blue';
-	}
-  
-	// Test whether we hit a sustained (average) level
-	// This must be a longer, sustained noise.
-	hit = thresholdSustained(wave, 0.3);
-	if (hit) {
-	  ball.radius++//document.getElementById('susTarget').classList.add('hit');
-	} else if (ball.radius>50) {
-	  ball.radius--
-	}
-  
-	// Optional rendering of data
-	//visualiser.renderWave(wave, true);
-	//visualiser.renderFreq(freq);
-  
-	// Run again
 	window.requestAnimationFrame(analyse);
   }
 
+createBalls();
 requestAnimationFrame(draw);
