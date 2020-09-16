@@ -2,6 +2,9 @@ let audioCtx, analyser, visualiser = null;
 let globalFreq;
 let avgBpm;
 let intervalMeter = new IntervalMeter(5, 200);
+let ball0Radius = ballArray["ball0"]["radius"];
+let ball1Radius = ballArray["ball1"]["radius"];
+let ball2Radius = ballArray["ball2"]["radius"];
 
 function analyse() {
   const bins = analyser.frequencyBinCount;
@@ -82,9 +85,9 @@ globalFreq = freq; //hook for freq to be global DOESN'T WORK. WHY????
 		hit = thresholdSustained(wave, 0.3);
 		if (hit) {
 			ball.radius++;//document.getElementById('susTarget').classList.add('hit');
-		} else if (ball.radius>50) {
-			ball.radius--;
-		}
+		} else if (ball.radius >= ball.size) {
+      ball.radius--;
+    }
 	}
 
   // Run again

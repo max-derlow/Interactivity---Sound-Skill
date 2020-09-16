@@ -4,9 +4,9 @@ canvas.height = document.documentElement.clientHeight;
 let context = canvas.getContext("2d");
 
 let ballArray = {
-	"ball0": {'radius': 30, 'colour': 'red', 'velocity': 10, 'mass': 10},
-	"ball1": {'radius': 60, 'colour': 'green', 'velocity': 6, 'mass': 10},
-	"ball2": {'radius': 90, 'colour': 'cyan', 'velocity': 2, 'mass': 10},
+	"ball0": {'radius': 30,'size': 30, 'colour': 'red', 'velocity': 10, 'mass': 10},
+	"ball1": {'radius': 60,'size': 60, 'colour': 'green', 'velocity': 6, 'mass': 10},
+	"ball2": {'radius': 90,'size': 90, 'colour': 'cyan', 'velocity': 2, 'mass': 10},
 };
 
 //Fix so these are generated programatically instead.
@@ -42,13 +42,14 @@ let ghostBallArray = {
 
 
 class Ball {
-	constructor(radius, colour, velocity, mass) {
+	constructor(radius, size, colour, velocity, mass) {
 		this.i = 0; //amount of times the ball has refreshed while in the air
 		this.i2 = 0;
 		this.r = 0; //friction;
 		this.x = 40;
 		this.y = 0;
-		this.radius = radius;
+		this.radius = radius; //mess around these
+		this.size = size; //constant
 		this.colour = colour;
 		this.opacity = 1;
 		this.velocity = velocity;
@@ -67,7 +68,7 @@ function createBalls() {
 		console.log(String(i));
 		let ball = "ball" + String(i);
 		let ballProp = ballArray["ball" + String(i)];
-		window[ball] = new Ball(ballProp.radius, ballProp.colour, ballProp.velocity, ballProp.mass);
+		window[ball] = new Ball(ballProp.radius, ballProp.size, ballProp.colour, ballProp.velocity, ballProp.mass);
 	}
 }
 
