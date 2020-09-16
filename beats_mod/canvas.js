@@ -288,6 +288,14 @@ function analyse() {
 	window.requestAnimationFrame(analyse);
   }
 
+function drawBigBall(){
+	context.beginPath();
+	context.arc(canvas.width + (runCounter * 4), canvas.height, (canvas.height/2), 0, 2 * Math.PI, false);
+	context.fillStyle = "rgba(255,153,51,0.75)";
+	context.fill();
+}
+
+drawBigBall();
 createBalls();
 createGhostBalls();
 requestAnimationFrame(draw);

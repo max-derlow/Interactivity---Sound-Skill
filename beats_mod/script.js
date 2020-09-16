@@ -6,7 +6,7 @@ let pulsed;
 // 5: number of samples to measure over
 // 200: millisecond expected length of pulse (to avoid counting several times for same sound)
 //      setting this too high will mean that legit pulses will be ignored
-let intervalMeter = new IntervalMeter(3, 200);
+let intervalMeter = new IntervalMeter(5, 200);
 
 if (document.readyState != 'loading') {
   onDocumentReady();
@@ -43,7 +43,7 @@ function onMicSuccess(stream) {
   // smoothingTimeConstant ranges from 0.0 to 1.0
   // 0 = no averaging. Fast response, jittery
   // 1 = maximum averaging. Slow response, smooth
-  analyser.smoothingTimeConstant = 0.8;
+  analyser.smoothingTimeConstant = 0.9;
 
   // Low and high shelf filters. Gain is set to 0 so they have no effect
   // could be useful for excluding background noise.
@@ -78,14 +78,14 @@ function analyse() {
 
   // In testing, with FFT size of 32, bucket #19 correspnds with metronome
   // ...but probably not your sound.
-  const magicBucket = 12;
+  //const magicBucket = 12;
 
   // Determine pulse if frequency threshold is exceeded.
   // -60 was determined empirically, you'll need to find your own threshold
-  let hit = (freq[magicBucket] > -60);
+  //let hit = (freq[magicBucket] > -61);
 
   // An alternative approach is to check for a peak, regardless of freq
-  //let hit = thresholdPeak(wave, 0.004);
+  let hit = thresholdPeak(wave, 0.3);
 
 
   if (hit) {
@@ -93,10 +93,6 @@ function analyse() {
     // to track the time between pulses.
     pulsed = intervalMeter.pulse();
   }
-
-  // Optional rendering of data
-  //visualiser.renderWave(wave, true);
-  //visualiser.renderFreq(freq);
 
   // Run again
   window.requestAnimationFrame(analyse);
