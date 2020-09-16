@@ -151,6 +151,7 @@ function draw() {
 		context.fill();
 	}
 	requestAnimationFrame(draw);
+	requestAnimationFrame(drawBigBall);
 	requestAnimationFrame(drawGhostBalls);
 }
 
@@ -183,6 +184,14 @@ function handleVelocity(ball, velocityDelta){
 		ball.x -= ball.velocity;
 	}
 }
+
+function drawBigBall(){
+	context.beginPath();
+	context.arc(canvas.width, canvas.height, (canvas.height/2), 0, 2 * Math.PI, false);
+	context.fillStyle = "orange";
+	context.fill();
+}
+
 
 function drawGhostBalls(){
 	handleRunCounter();
