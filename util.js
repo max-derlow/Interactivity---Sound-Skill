@@ -141,5 +141,4 @@ class IntervalMeter {
     }
     return total / (this.store.length - 1);
   }
-
 }

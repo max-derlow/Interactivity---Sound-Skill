@@ -8,7 +8,7 @@ let pulsed;
 //      setting this too high will mean that legit pulses will be ignored
 let intervalMeter = new IntervalMeter(5, 200);
 
-if (document.readyState != 'loading') {
+if (document.readyState !== 'loading') {
   onDocumentReady();
 } else {
   document.addEventListener('DOMContentLoaded', onDocumentReady);

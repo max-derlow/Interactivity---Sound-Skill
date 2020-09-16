@@ -1,5 +1,52 @@
 let audioCtx, analyser, visualiser = null;
 let globalFreq;
+let intervalMeter = new IntervalMeter(5, 200);
+
+function analyse() {
+  const bins = analyser.frequencyBinCount;
+
+  // Get frequency and amplitude data
+  const freq = new Float32Array(bins);
+  const wave = new Float32Array(bins);
+  analyser.getFloatFrequencyData(freq);
+  analyser.getFloatTimeDomainData(wave);
+
+  // In testing, with FFT size of 32, bucket #19 correspnds with metronome
+  // ...but probably not your sound.
+  const magicBucket = 32;
+
+  // Determine pulse if frequency threshold is exceeded.
+  // -60 was determined empirically, you'll need to find your own threshold
+  let hit = (freq[magicBucket] > -60);
+
+  // An alternative approach is to check for a peak, regardless of freq
+  //let hit = thresholdPeak(wave, 0.3);
+
+
+  if (hit) {
+    // Use the IntevalMeter (provided by util.js)
+    // to track the time between pulses.
+    pulsed = intervalMeter.pulse();
+    let avgMs = intervalMeter.calculate();
+    let avgBpm = 1.0 / (avgMs / 1000.0) * 60.0;
+    console.log('level: ' + freq[magicBucket] + '\tms: ' + avgMs +'\tbpm: ' + avgBpm);
+  }
+//================================================================
+//                Determine BPM via an average.
+//================================================================
+
+  /*if (pulsed) {
+    // Debug
+    let avgMs = intervalMeter.calculate();
+    let avgBpm = 1.0 / (avgMs / 1000.0) * 60.0;
+    console.log('level: ' + freq[magicBucket] + '\tms: ' + avgMs +'\tbpm: ' + avgBpm);
+  }*/
+
+
+  // Run again
+  window.requestAnimationFrame(analyse);
+}
+
 if (document.readyState != 'loading') {
   onDocumentReady();
 } else {
@@ -50,46 +97,6 @@ function onMicSuccess(stream) {
   // Start loop
   window.requestAnimationFrame(analyse);
 }
-
-/*function analyse() {
-  const bins = analyser.frequencyBinCount;
-
-  // Get frequency and amplitude data
-  const freq = new Float32Array(bins);
-  const wave = new Float32Array(bins);
-  analyser.getFloatFrequencyData(freq);
-  analyser.getFloatTimeDomainData(wave);
-
-  globalFreq = freq; //hook for freq to be global
-
-  // Test whether we hit a threshold between 0-80Hz (bass region)
-  var hit = thresholdFrequency(0, 80, freq, -70);
-  if (hit) {
-    ball.r = 0.02//document.getElementById('freqTarget').classList.add('hit');
-  }
-
-  // Test whether we hit an peak threshold (this can be a short burst of sound)
-  hit = thresholdPeak(wave, 0.5);
-  if (hit) {
-    ball.velocity++;//document.getElementById('peakTarget').classList.add('hit');
-  }
-
-  // Test whether we hit a sustained (average) level
-  // This must be a longer, sustained noise.
-  hit = thresholdSustained(wave, 0.3);
-  if (hit) {
-    ball.radius++//document.getElementById('susTarget').classList.add('hit');
-  } else if (ball.radius>50) {
-    ball.radius--
-  }
-
-  // Optional rendering of data
-  //visualiser.renderWave(wave, true);
-  //visualiser.renderFreq(freq);
-
-  // Run again
-  window.requestAnimationFrame(analyse);
-}*/
 
 // Returns TRUE if the threshold value is hit between the given frequency range
 // Note that FFT size & smoothing has an averaging effect
