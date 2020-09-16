@@ -2,6 +2,7 @@ let audioCtx, analyser;
 let visualiser = null;
 let bpmArray = [];
 let pulsed;
+let avgBpm;
 // Set up the interval meter.
 // 5: number of samples to measure over
 // 200: millisecond expected length of pulse (to avoid counting several times for same sound)
@@ -100,7 +101,7 @@ function analyse() {
 if (pulsed) {
   // Debug
   let avgMs = intervalMeter.calculate();
-  let avgBpm = 1.0 / (avgMs / 1000.0) * 60.0;
+  avgBpm = 1.0 / (avgMs / 1000.0) * 60.0;
   console.log('level: ' + freq[magicBucket] + '\tms: ' + avgMs +'\tbpm: ' + avgBpm);
 }
 

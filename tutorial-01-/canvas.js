@@ -156,22 +156,38 @@ function draw() {
 }
 
 //Handles the 'runCounter' which affects the opacity of ghost balls. Real fokkin' spaghetti code but w/e.
-let runCounter = 0;
-let runDirection = '+';
+let runCounter = 100;
+// let runDirection = '+';
 function handleRunCounter(){
-	if(runDirection === '+' && runCounter < 100){
-		runCounter += 1;
-	} else if(runDirection === '+'&& runCounter >= 100){
-		runCounter -= 1;
-		runDirection = '-';
+	let addBpm;
+	if(avgBpm){
+		if(isFinite(avgBpm) && avgBpm !== null && avgBpm !== 0){
+			addBpm = avgBpm/50;
+			console.log("adding bpm");
+		}
+	} else {
+		addBpm = 0;
 	}
 
+	if(runCounter <= 0) {
+		runCounter = 100;
+	} else {
+		runCounter -= (1 + addBpm);
+	}
+/*
+	if(runDirection === '+' && runCounter < 100){
+		runCounter += (1 + addBpm);
+	} else if(runDirection === '+'&& runCounter >= 100){
+		runCounter -= (1 + addBpm);
+		runDirection = '-';
+	}
 	if(runDirection === '-' && runCounter > 0){
-		runCounter -= 1;
+		runCounter -= (1 + addBpm);
 	} else if(runDirection === '-'&& runCounter <= 0){
-		runCounter += 1;
+		runCounter += (1 + addBpm);
 		runDirection = '+';
 	}
+*/
 }
 
 //handle velocity - maybe or maybe not. doesn't seem optimal.

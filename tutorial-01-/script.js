@@ -1,5 +1,6 @@
 let audioCtx, analyser, visualiser = null;
 let globalFreq;
+let avgBpm;
 let intervalMeter = new IntervalMeter(5, 200);
 
 function analyse() {
@@ -28,7 +29,7 @@ function analyse() {
     // to track the time between pulses.
     pulsed = intervalMeter.pulse();
     let avgMs = intervalMeter.calculate();
-    let avgBpm = 1.0 / (avgMs / 1000.0) * 60.0;
+    avgBpm = 1.0 / (avgMs / 1000.0) * 60.0;
     console.log('level: ' + freq[magicBucket] + '\tms: ' + avgMs +'\tbpm: ' + avgBpm);
   }
 //================================================================
