@@ -245,57 +245,6 @@ function handleBehaviour(ball, behaviour, intensity){
 	}
 }
 
-function analyse() {
-	const bins = analyser.frequencyBinCount;
-  
-	// Get frequency and amplitude data
-	const freq = new Float32Array(bins);
-	const wave = new Float32Array(bins);
-	analyser.getFloatFrequencyData(freq);
-	analyser.getFloatTimeDomainData(wave);
-  
-	globalFreq = freq; //hook for freq to be global DOESN'T WORK. WHY????
-  
-	// Test whether we hit a threshold between 0-80Hz (bass region)
-	for(let i = 0; i <= Object.keys(ballArray).length -1; i++) {
-		let ball = window["ball" + String(i)];
-		let hit = thresholdFrequency(0, 95, freq, -70);
-
-		if (hit) {
-			//ball.velocity -=1;//document.getElementById('freqTarget').classList.add('hit');
-			if (ball.velocity > 0) {
-				ball.velocity += 0.1;
-			} else {
-				ball.velocity -= 0.1;
-			}
-		} else {
-			if (ball.velocity > 0) {
-				ball.velocity -= 0.1;
-			} else {
-				ball.velocity += 0.1;
-				//console.log(ball.velocity);
-			}
-		}
-
-		// Test whether we hit an peak threshold (this can be a short burst of sound)
-		hit = thresholdPeak(wave, 0.3);
-		if (hit) {
-			// Behaviour(ball.behaviour, ball.intensity)
-			ball.y -=40;//document.getElementById('peakTarget').classList.add('hit');
-		} else {
-			//ball.colour = 'blue';
-		}
-
-		hit = thresholdSustained(wave, 0.3);
-		if (hit) {
-			ball.radius++;//document.getElementById('susTarget').classList.add('hit');
-		} else if (ball.radius>50) {
-			ball.radius--;
-		}
-	}
-	window.requestAnimationFrame(analyse);
-  }
-
 createBalls();
 createGhostBalls();
 requestAnimationFrame(draw);
