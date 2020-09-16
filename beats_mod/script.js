@@ -78,14 +78,14 @@ function analyse() {
 
   // In testing, with FFT size of 32, bucket #19 correspnds with metronome
   // ...but probably not your sound.
-  //const magicBucket = 12;
+  const magicBucket = 36;
 
   // Determine pulse if frequency threshold is exceeded.
   // -60 was determined empirically, you'll need to find your own threshold
-  //let hit = (freq[magicBucket] > -61);
+  let hit = (freq[magicBucket] > -60);
 
   // An alternative approach is to check for a peak, regardless of freq
-  let hit = thresholdPeak(wave, 0.3);
+  //let hit = thresholdPeak(wave, 0.3);
 
 
   if (hit) {
@@ -93,6 +93,17 @@ function analyse() {
     // to track the time between pulses.
     pulsed = intervalMeter.pulse();
   }
+//================================================================
+//                Determine BPM via an average.
+//================================================================
+
+if (pulsed) {
+  // Debug
+  let avgMs = intervalMeter.calculate();
+  let avgBpm = 1.0 / (avgMs / 1000.0) * 60.0;
+  console.log('level: ' + freq[magicBucket] + '\tms: ' + avgMs +'\tbpm: ' + avgBpm);
+}
+
 
   // Run again
   window.requestAnimationFrame(analyse);
