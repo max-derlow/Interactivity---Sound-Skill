@@ -108,11 +108,11 @@ function draw() {
 			ball.x += ball.velocity;
 		}
 */
-		if(ball.velocity >= 40){
-			ball.velocity = 40;
+		if(ball.velocity >= 20){
+			ball.velocity = 20;
 			console.log(ball.velocity);
-		} else if(ball.velocity <= -40){
-			ball.velocity = -40;
+		} else if(ball.velocity <= -20){
+			ball.velocity = -20;
 		}
 
 	// the ball is bouncing left and right
