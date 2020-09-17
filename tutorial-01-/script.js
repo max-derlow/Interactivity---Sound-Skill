@@ -33,7 +33,7 @@ function analyse() {
     pulsed = intervalMeter.pulse();
     let avgMs = intervalMeter.calculate();
     avgBpm = 1.0 / (avgMs / 1000.0) * 60.0;
-    console.log('level: ' + freq[magicBucket] + '\tms: ' + avgMs +'\tbpm: ' + avgBpm);
+    //console.log('level: ' + freq[magicBucket] + '\tms: ' + avgMs +'\tbpm: ' + avgBpm);
   }
 //================================================================
 //                Determine BPM via an average.

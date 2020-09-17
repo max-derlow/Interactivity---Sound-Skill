@@ -3,6 +3,10 @@ canvas.width = document.documentElement.clientWidth;
 canvas.height = document.documentElement.clientHeight;
 let context = canvas.getContext("2d");
 let bigBallMod;
+let ghostBallReset;
+let bigBallArray = {
+	"bigBall0": {'radius':(canvas.width/2), 'size':(canvas.width/2), 'colour':'orange', 'velocity':10, 'mass':10}
+};
 let ballArray = {
 	"ball0": {'radius': 30,'size': 30, 'colour': 'red', 'velocity': 10, 'mass': 10},
 	"ball1": {'radius': 60,'size': 60, 'colour': 'green', 'velocity': 6, 'mass': 10},
@@ -10,36 +14,7 @@ let ballArray = {
 };
 
 //Fix so these are generated programatically instead.
-let ghostBallArray = {
-	"ghostBall0":  {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall1":  {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall2":  {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall3":  {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall4":  {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall5":  {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall6":  {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall7":  {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall8":  {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall9":  {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall10": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall11": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall12": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall13": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall14": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall15": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall16": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall17": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall18": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall19": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall20": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall21": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall22": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall23": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall24": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall25": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-	"ghostBall26": {'radius': 20, 'colour': 'rgba(255, 0, 255,', 'velocity': 10, 'mass': 10},
-};
-
+let ghostBallArray = {};
 
 class Ball {
 	constructor(radius, size, colour, velocity, mass) {
@@ -75,8 +50,12 @@ function createBalls() {
 //create all ghost ball objects
 function createGhostBalls(){
 	console.log(Object.keys(ghostBallArray));
-	for(let i = 0; i <= Object.keys(ghostBallArray).length -1; i++){
-		console.log(String(i));
+	for(let i = 0; i <= 30 -1; i++){
+		let c1 = Math.floor(Math.random() * 255);
+		let c2 = Math.floor(Math.random() * 255);
+		let c3 = Math.floor(Math.random() * 255);
+		//ghostBallArray["ghostBall" + String(i)] = {'radius': 20, 'colour': 'rgba(255, 0 , 255,', 'velocity': 10, 'mass': 10}; //predetermined
+		ghostBallArray["ghostBall" + String(i)] = {'radius': 20, 'colour': 'rgba('+ c1 + ',' + c2 + ',' + c3 + ',', 'velocity': 10, 'mass': 10}; //random colour
 		let ball = "ghostBall" + String(i);
 		let ballProp = ghostBallArray["ghostBall" + String(i)];
 		window[ball] = new Ball(ballProp.radius, ballProp.size, ballProp.colour, ballProp.velocity, ballProp.mass);
@@ -162,18 +141,28 @@ let runCounter = 100;
 function handleRunCounter(){
 	let addBpm;
 	if(avgBpm){
-		if(isFinite(avgBpm) && avgBpm !== null && avgBpm !== 0){
+		if(isFinite(avgBpm) && avgBpm !== null && avgBpm !== 0 && !isNaN(avgBpm)){
 			addBpm = avgBpm/50;
-			//console.log("adding bpm");
+			console.log("adding bpm");
 		}
 	} else {
+		console.log("Value is crazeyyy");
 		addBpm = 0;
+	}
+//necessary error handling for a nasty bug
+	if(isNaN(runCounter)){
+		console.log(runCounter);
+		console.log(avgBpm);
+		runCounter = 0;
+
 	}
 
 	if(runCounter <= 0) {
 		runCounter = 100;
+		ghostBallReset = true;
 	} else {
 		runCounter -= (1 + addBpm);
+		ghostBallReset = false;
 	}
 /*
 	if(runDirection === '+' && runCounter < 100){
@@ -203,8 +192,9 @@ function handleVelocity(ball, velocityDelta){
 }
 
 function drawBigBall(){
+	let ball = bigBallArray.bigBall0;
 	context.beginPath();
-	context.arc(canvas.width, canvas.height, (canvas.height/2), 0, 2 * Math.PI, false);
+	context.arc((canvas.width - (ball.radius/4)), (canvas.height - ball.radius/2), (canvas.height/2), 0, 2 * Math.PI, false);
 	context.fillStyle = "orange";
 	context.fill();
 }
@@ -215,15 +205,15 @@ function drawGhostBalls(){
 	let opacity = runCounter/100;
 
 	for(let i = 0; i <= Object.keys(ghostBallArray).length -1; i++) {
+		console.log("isRunning");
 		let ball = window["ghostBall" + String(i)];
-		if(runCounter/100 === 0.01){
+		if(ghostBallReset === true){
 			ball.x = Math.floor(Math.random() * canvas.width);
 			ball.y = Math.floor(Math.random() * canvas.height);
 		}
 		context.beginPath();
 		context.arc(ball.x, ball.y, ball.radius, 0, 2 * Math.PI, false);
 		context.fillStyle = ball.colour + opacity + ")";
-		//console.log(context.fillStyle);
 		context.fill();
 	}
 }
