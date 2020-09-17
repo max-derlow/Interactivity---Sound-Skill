@@ -77,6 +77,7 @@ globalFreq = freq; //hook for freq to be global DOESN'T WORK. WHY????
 		hit = thresholdPeak(wave, 0.3);
 		if (hit) {
 			// Behaviour(ball.behaviour, ball.intensity)
+          //bigBallMod += 1/3;
 			ball.y -=40;//document.getElementById('peakTarget').classList.add('hit');
 		} else {
 			//ball.colour = 'blue';

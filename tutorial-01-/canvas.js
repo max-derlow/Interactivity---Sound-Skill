@@ -2,7 +2,7 @@ let canvas  = document.getElementById("graphics");
 canvas.width = document.documentElement.clientWidth;
 canvas.height = document.documentElement.clientHeight;
 let context = canvas.getContext("2d");
-
+let bigBallMod;
 let ballArray = {
 	"ball0": {'radius': 30,'size': 30, 'colour': 'red', 'velocity': 10, 'mass': 10},
 	"ball1": {'radius': 60,'size': 60, 'colour': 'green', 'velocity': 6, 'mass': 10},
@@ -79,7 +79,7 @@ function createGhostBalls(){
 		console.log(String(i));
 		let ball = "ghostBall" + String(i);
 		let ballProp = ghostBallArray["ghostBall" + String(i)];
-		window[ball] = new Ball(ballProp.radius, ballProp.colour, ballProp.velocity, ballProp.mass);
+		window[ball] = new Ball(ballProp.radius, ballProp.size, ballProp.colour, ballProp.velocity, ballProp.mass);
 	}
 }
 
@@ -143,7 +143,7 @@ function draw() {
 		else if(Math.abs(ball.velocity) <= 0.05){
 			ball.r = 0.5;
 			ball.velocity = 0.5;
-			console.log("killed dead");
+			//console.log("killed dead");
 		}
 
 		context.beginPath();
@@ -164,7 +164,7 @@ function handleRunCounter(){
 	if(avgBpm){
 		if(isFinite(avgBpm) && avgBpm !== null && avgBpm !== 0){
 			addBpm = avgBpm/50;
-			console.log("adding bpm");
+			//console.log("adding bpm");
 		}
 	} else {
 		addBpm = 0;
@@ -223,6 +223,7 @@ function drawGhostBalls(){
 		context.beginPath();
 		context.arc(ball.x, ball.y, ball.radius, 0, 2 * Math.PI, false);
 		context.fillStyle = ball.colour + opacity + ")";
+		//console.log(context.fillStyle);
 		context.fill();
 	}
 }
