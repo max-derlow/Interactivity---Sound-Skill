@@ -131,7 +131,7 @@ function draw() {
 		context.fill();
 	}
 	requestAnimationFrame(draw);
-	requestAnimationFrame(drawBigBall);
+	//requestAnimationFrame(drawBigBall);
 	requestAnimationFrame(drawGhostBalls);
 }
 
